@@ -21,12 +21,12 @@ bool PhysicsGame::startup()
 
 	Sphere* ball = new Sphere(glm::vec2(-20.0f, 0.0f), glm::vec2(), 1, 5, glm::vec4(0.8f, 0.2f, 0.2f, 1.0f));
 	m_scene->addActor(ball);
-	ball->applyForce(glm::vec2(10.0f, 0.0f));
+	//ball->applyForce(glm::vec2(10.0f, 0.0f));
 
 	Sphere* orb = new Sphere(glm::vec2(20.0f, 0.0f), glm::vec2(), 1, 5, glm::vec4(0.2f, 0.8f, 0.8f, 1.0f));
 	m_scene->addActor(orb);
 
-	Plane* surface = new Plane(glm::vec2(0.2f, 1.0f), -30.0f, glm::vec4(0.2f, 0.8f, 0.2f, 1.0f));
+	Plane* surface = new Plane(glm::vec2(0.4f, 2.0f), -30.0f, glm::vec4(0.2f, 0.8f, 0.2f, 1.0f));
 	m_scene->addActor(surface);
 
 	return true;

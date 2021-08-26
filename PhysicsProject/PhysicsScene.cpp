@@ -111,7 +111,7 @@ bool PhysicsScene::sphereToPlane(PhysicsObject* object1, PhysicsObject* object2)
 		float sphereToPlaneDistance = glm::dot(sphereCenter, planeNormal) - planeDistance - sphereRadius;
 
 		if (sphereToPlaneDistance <= 0) {
-			sphere->applyForce(-sphere->getVelocity() * sphere->getMass());
+			plane->resolveCollision(sphere);
 			return true;
 		}
 	}
@@ -132,8 +132,7 @@ bool PhysicsScene::sphereToSphere(PhysicsObject* object1, PhysicsObject* object2
 		float distance = glm::sqrt(distanceVec.x * distanceVec.x + distanceVec.y * distanceVec.y);
 		//If the distance is less than the combined radii, there is a collision
 		if (glm::abs(distance) < sphere1->getRadius() + sphere2->getRadius()) {
-			sphere1->applyForce(-(sphere1->getVelocity() * sphere1->getMass()));
-			sphere2->applyForce(-(sphere2->getVelocity() * sphere2->getMass()));
+			sphere1->resolveCollision(sphere2);
 			return true;
 		}
 	}
