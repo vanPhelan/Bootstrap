@@ -15,7 +15,7 @@ public:
 
 private:
 	int start();
-	int update();
+	int update(float deltaTime);
 	int draw();
 	int end();
 
@@ -25,6 +25,8 @@ private:
 	GLFWwindow* m_window = nullptr;
 	int m_width, m_height;
 	const char* m_title;
+
+	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);
 
 	aie::ShaderProgram m_shader;
 

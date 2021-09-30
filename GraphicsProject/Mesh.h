@@ -1,9 +1,10 @@
 #pragma once
+#include "Entity.h"
 #include "gl_core_4_4.h"
 #include "glm\vec4.hpp"
 #include "glm\mat4x4.hpp"
 
-class Mesh
+class Mesh : public Entity
 {
 public:
 	struct Vertex {
@@ -15,8 +16,8 @@ public:
 	Mesh();
 	~Mesh();
 
-	void start();
-	void draw();
+	void start() override;
+	void draw() override;
 
 	void generateVertices(Vertex* vertices, int& vertexCount);
 

@@ -10,7 +10,7 @@ Engine::Engine() : Engine(1280, 720, "Window")
 
 Engine::Engine(int width, int height, const char* title)
 {
-	m_world = new World(width, height);
+	m_world = new World();
 	m_width = width;
 	m_height = height;
 	m_title = title;
@@ -33,7 +33,7 @@ int Engine::run()
 
 	//Update and draw
 	while (!getGameOver()) {
-		exitCode = update();
+		exitCode = update(1.0f);
 		if (exitCode) {
 			return exitCode;
 		}
@@ -100,13 +100,13 @@ int Engine::start()
 	return 0;
 }
 
-int Engine::update()
+int Engine::update(float deltaTime)
 {
 	if (!m_window) return -4;
 
 	glfwPollEvents();
 
-	m_world->update();
+	m_world->update(deltaTime);
 
 	return 0;
 }
@@ -120,7 +120,13 @@ int Engine::draw()
 
 	m_shader.bind();
 
-	glm::mat4 projectionViewModel = m_world->getProjectionViewModel();
+	m_projectionMatrix = glm::perspective(
+		glm::pi<float>() / 4.0f,
+		(float)m_width / (float)m_height,
+		0.001f,
+		1000.0f
+	);
+	glm::mat4 projectionViewModel = m_projectionMatrix * m_world->getViewModel();
 	m_shader.bindUniform("projectionViewModel", projectionViewModel);
 
 	m_world->draw();
