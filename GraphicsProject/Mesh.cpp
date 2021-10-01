@@ -2,13 +2,6 @@
 
 Mesh::Mesh()
 {
-	m_transform = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-
 	m_triCount = 0;
 	m_vertexArrayObject = 0;
 	m_vertexBufferObject = 0;
@@ -22,7 +15,7 @@ Mesh::~Mesh()
 	glDeleteBuffers(1, &m_indexBufferObject);
 }
 
-void Mesh::start()
+void Mesh::onStart()
 {
 	assert(m_vertexArrayObject == 0);
 
@@ -34,28 +27,17 @@ void Mesh::start()
 	glBindVertexArray(m_vertexArrayObject);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObject);
 
-	//Define the vertices for a quad
-	Vertex vertices[6];
-	//triangle 0
-	vertices[0].position = { -0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[1].position = { 0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[2].position = { -0.5f, 0.0f, -0.5f, 1.0f };
-	//triangle 1
-	vertices[3].position = { 0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[4].position = { -0.5f, 0.0f, -0.5f, 1.0f };
-	vertices[5].position = { 0.5f, 0.0f, -0.5f, 1.0f };
-
-	////Generate the vertices
-	//Vertex* vertices{};
-	//int vertexCount;
-	//generateVertices(vertices, vertexCount);
+	//Generate the vertices
+	Vertex* vertices = nullptr;
+	unsigned int vertexCount;
+	vertices = generateVertices(vertexCount, m_triCount);
 
 	//Fill vertex buffer
 	glBufferData(
-		GL_ARRAY_BUFFER,	//type of buffer
-		sizeof(Vertex) * 6,	//size in bytes of all vertices
-		vertices,			//all vertices
-		GL_STATIC_DRAW		//how the data will update
+		GL_ARRAY_BUFFER,				//type of buffer
+		sizeof(Vertex) * vertexCount,	//size in bytes of all vertices
+		vertices,						//all vertices
+		GL_STATIC_DRAW					//how the data will update
 	);
 
 	//Enable vertex position as first attribute
@@ -74,28 +56,11 @@ void Mesh::start()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	//Deallocate vertices
-	//delete[] vertices;
+	delete[] vertices;
 }
 
-void Mesh::draw()
+void Mesh::onDraw()
 {
 	glBindVertexArray(m_vertexArrayObject);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
-void Mesh::generateVertices(Vertex* vertices, int& vertexCount)
-{
-	vertexCount = 6;
-
-	//Define the vertices for a quad
-	vertices = new Vertex[vertexCount];
-
-	//triangle 0
-	vertices[0].position = { -0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[1].position = { 0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[2].position = { -0.5f, 0.0f, -0.5f, 1.0f };
-	//triangle 1
-	vertices[3].position = { 0.5f, 0.0f, 0.5f, 1.0f };
-	vertices[4].position = { -0.5f, 0.0f, -0.5f, 1.0f };
-	vertices[5].position = { 0.5f, 0.0f, -0.5f, 1.0f };
 }
