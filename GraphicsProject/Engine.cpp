@@ -10,7 +10,6 @@ Engine::Engine() : Engine(1280, 720, "Window")
 
 Engine::Engine(int width, int height, const char* title)
 {
-	m_world = new World();
 	m_width = width;
 	m_height = height;
 	m_title = title;
@@ -18,12 +17,16 @@ Engine::Engine(int width, int height, const char* title)
 
 Engine::~Engine()
 {
-	delete m_world;
 }
 
 int Engine::run()
 {
 	int exitCode = 0;
+
+	//Check for active world
+	if (!m_activeWorld) {
+		return exitCode = 1;
+	}
 
 	//Start
 	exitCode = start();
@@ -95,7 +98,7 @@ int Engine::start()
 		return -10;
 	}
 
-	m_world->start();
+	m_activeWorld->start();
 
 	return 0;
 }
@@ -106,7 +109,7 @@ int Engine::update(float deltaTime)
 
 	glfwPollEvents();
 
-	m_world->update(deltaTime);
+	m_activeWorld->update(deltaTime);
 
 	return 0;
 }
@@ -120,16 +123,18 @@ int Engine::draw()
 
 	m_shader.bind();
 
+	Camera* camera = m_activeWorld->getCamera();
+
 	m_projectionMatrix = glm::perspective(
-		glm::pi<float>() / 4.0f,
+		camera->getFieldOfView() * glm::pi<float>() / 180.0f,
 		(float)m_width / (float)m_height,
-		0.001f,
-		1000.0f
+		camera->getNearClip(),
+		camera->getFarClip()
 	);
-	glm::mat4 projectionViewModel = m_projectionMatrix * m_world->getViewModel();
+	glm::mat4 projectionViewModel = m_projectionMatrix * camera->getGlobalTransform();
 	m_shader.bindUniform("projectionViewModel", projectionViewModel);
 
-	m_world->draw();
+	m_activeWorld->draw();
 
 	glfwSwapBuffers(m_window);
 
@@ -140,7 +145,7 @@ int Engine::end()
 {
 	if (!m_window) return -6;
 
-	m_world->end();
+	m_activeWorld->end();
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();

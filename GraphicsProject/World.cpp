@@ -1,15 +1,7 @@
 #include "World.h"
-#include "glm/ext.hpp"
 
 void World::start()
 {
-	//Create camera transforms
-	m_viewMatrix = glm::lookAt(
-		glm::vec3(10.0f, 10.0f, 10.0f),
-		glm::vec3(0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f)
-	);
-
 	onStart();
 }
 
@@ -18,16 +10,20 @@ void World::update(float deltaTime)
 	onUpdate(deltaTime);
 
 	//Update the list of entities
-	for (Entity* entity : addQueue) {
+	for (Entity* entity : addList) {
 		entities.push_back(entity);
 	}
-	for (Entity* entity : removeQueue) {
+	addList.clear();
+	entities.unique();
+	for (Entity* entity : removeList) {
 		entities.remove(entity);
 	}
-	for (Entity* entity : destroyQueue) {
+	removeList.clear();
+	for (Entity* entity : destroyList) {
 		entities.remove(entity);
 		delete entity;
 	}
+	destroyList.clear();
 
 	//Update the entities
 	for (Entity* entity : entities) {
@@ -51,24 +47,19 @@ void World::end()
 
 void World::add(Entity* entity)
 {
-	removeQueue.remove(entity);
-	addQueue.push_back(entity);
+	removeList.remove(entity);
+	addList.push_back(entity);
 }
 
 void World::remove(Entity* entity)
 {
-	addQueue.remove(entity);
-	removeQueue.push_back(entity);
+	addList.remove(entity);
+	removeList.push_back(entity);
 }
 
 void World::destroy(Entity* entity)
 {
-	addQueue.remove(entity);
-	removeQueue.remove(entity);
-	destroyQueue.push_back(entity);
-}
-
-glm::mat4 World::getViewModel()
-{
-	return m_viewMatrix;
+	addList.remove(entity);
+	removeList.remove(entity);
+	destroyList.push_back(entity);
 }

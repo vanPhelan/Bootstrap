@@ -1,7 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "Quad.h"
-#include "glm/mat4x4.hpp"
+#include "Camera.h"
 #include <list>
 
 class World
@@ -24,14 +23,15 @@ public:
 	void remove(Entity* entity);
 	void destroy(Entity* entity);
 
-	glm::mat4 getViewModel();
+	Camera* getCamera() { return m_camera; }
+	void setCamera(Camera* camera) { m_camera = camera; }
 
 private:
-	glm::mat4 m_viewMatrix = glm::mat4(1.0f);
+	Camera* m_camera = nullptr;
 
 	std::list<Entity*> entities;
-	std::list<Entity*> addQueue;
-	std::list<Entity*> removeQueue;
-	std::list<Entity*> destroyQueue;
+	std::list<Entity*> addList;
+	std::list<Entity*> removeList;
+	std::list<Entity*> destroyList;
 };
 

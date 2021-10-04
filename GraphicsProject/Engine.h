@@ -13,6 +13,9 @@ public:
 
 	int run();
 
+	World* getActiveWorld() { return m_activeWorld; }
+	void setActiveWorld(World* world) { m_activeWorld = world; }
+
 private:
 	int start();
 	int update(float deltaTime);
@@ -30,6 +33,6 @@ private:
 
 	aie::ShaderProgram m_shader;
 
-	World* m_world;
+	World* m_activeWorld = nullptr;
 };
 
