@@ -28,9 +28,8 @@ void Mesh::onStart()
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObject);
 
 	//Generate the vertices
-	Vertex* vertices = nullptr;
 	unsigned int vertexCount;
-	vertices = generateVertices(vertexCount, m_triCount);
+	Vertex* vertices = generateVertices(vertexCount, m_triCount);
 
 	//Fill vertex buffer
 	glBufferData(
@@ -50,6 +49,16 @@ void Mesh::onStart()
 		sizeof(Vertex),			//size in bytes of one vertex
 		0						//memory position of this attribute
 	);
+	//Enable vertex color as second attribute
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1,						//attribute index
+		4,						//number of values within attribute
+		GL_FLOAT,				//type of each value
+		GL_FALSE,				//whether to normalize
+		sizeof(Vertex),			//size in bytes of one vertex
+		(void*)sizeof(glm::vec4)//memory position of this attribute
+	);
 
 	//Unbind buffer and array
 	glBindVertexArray(0);
@@ -62,5 +71,5 @@ void Mesh::onStart()
 void Mesh::onDraw()
 {
 	glBindVertexArray(m_vertexArrayObject);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_TRIANGLES, 0, m_triCount * 3);
 }

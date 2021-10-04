@@ -19,7 +19,6 @@ public:
 	void onStart() override;
 	void onDraw() override;
 
-private:
 	virtual Vertex* generateVertices(unsigned int& vertexCount, unsigned int& triCount) = 0;
 
 private:
