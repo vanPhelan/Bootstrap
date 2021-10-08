@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "Quad.h"
 
-class GraphicsWorld : public World
+class TestWorld : public World
 {
 public:
 	void onStart() override;

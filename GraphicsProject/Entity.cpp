@@ -1,5 +1,15 @@
 #include "Entity.h"
 
+Entity::Entity()
+{
+	m_transform = new Transform();
+}
+
+Entity::~Entity()
+{
+	delete m_transform;
+}
+
 void Entity::start()
 {
 	onStart();
@@ -23,20 +33,4 @@ void Entity::end()
 {
 	onEnd();
 	m_started = false;
-}
-
-void Entity::setLocalTransform(glm::mat4 transform)
-{
-	m_localTransform = transform;
-	m_isGlobalTransformDirty = true;
-}
-
-glm::mat4 Entity::getGlobalTransform()
-{
-	if (!m_parent)
-		m_globalTransform = m_localTransform;
-	else if (m_isGlobalTransformDirty)
-		m_globalTransform = m_parent->getGlobalTransform() * m_localTransform;
-
-	return m_globalTransform;
 }

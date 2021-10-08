@@ -1,80 +1,103 @@
 #include "Transform.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/euler_angles.hpp"
+#include "glm/gtx/transform.hpp"
 
-glm::vec3 Transform::getPosition()
+void Transform::translate(glm::vec3 translation)
 {
-	return m_position;
+	m_position += translation;
+	m_shouldUpdateLocalMatrix = true;
+}
+
+void Transform::translate(float x, float y, float z)
+{
+	translate(glm::vec3(x, y, z));
+}
+
+void Transform::rotate(glm::vec3 rotation)
+{
+	m_rotation += rotation;
+	m_shouldUpdateLocalMatrix = true;
+}
+
+void Transform::rotate(float pitch, float yaw, float roll)
+{
+	glm::toQuat()
+}
+
+void Transform::scale(glm::vec3 scale)
+{
+	m_scale += scale;
+	m_shouldUpdateLocalMatrix = true;
+}
+
+void Transform::scale(float x, float y, float z)
+{
+	scale(glm::vec3(x, y, z));
 }
 
 void Transform::setPosition(glm::vec3 position)
 {
-	m_position = glm::vec4(position, 1.0f);
+	m_position = glm::vec3(position);
+	m_shouldUpdateLocalMatrix = true;
 
 }
 
 void Transform::setPosition(float x, float y, float z)
 {
-	m_position = glm::vec4(x, y, z, 1.0f);
+	setPosition(glm::vec3(x, y, z));
 }
 
-glm::vec3 Transform::getRotation()
+void Transform::setRotation(glm::quat rotation)
 {
-	return m_rotation;
+	m_rotation = glm::quat(rotation);
+	m_shouldUpdateLocalMatrix = true;
 }
 
-void Transform::setRotation(glm::vec3 rotation)
+void Transform::setRotation(float pitch, float yaw, float roll)
 {
-	m_rotation = glm::vec4(rotation, 0.0f);
-}
-
-void Transform::setRotation(float x, float y, float z)
-{
-	m_rotation = glm::vec4(x, y, z, 0.0f);
-}
-
-glm::vec3 Transform::getScale()
-{
-	return m_scale;
+	
+	setRotation(glm::vec3(x, y, z));
 }
 
 void Transform::setScale(glm::vec3 scale)
 {
-	m_scale = glm::vec4(scale, 0.0f);
+	m_scale = glm::vec3(scale);
+	m_shouldUpdateLocalMatrix = true;
 }
 
 void Transform::setScale(float x, float y, float z)
 {
-	m_scale = glm::vec4(x, y, z, 0.0f);
+	setScale(glm::vec3(x, y, z));
 }
 
-glm::vec3 Transform::getRight()
+glm::mat4 Transform::getLocalMatrix()
 {
-	return glm::vec3();
-}
+	if (m_shouldUpdateLocalMatrix) {
+		//glm::mat4 matrix = glm::mat4(1.0f);
 
-glm::vec3 Transform::getUp()
-{
-	return glm::vec3();
-}
+		//matrix = glm::translate(matrix, m_position);
+		//matrix = glm::rotate(matrix, m_rotation.y, glm::vec3(-1.0f, 0.0f, 0.0f));
+		//matrix = glm::rotate(matrix, m_rotation.x, glm::vec3(0.0f, 1.0f, 0.0f));
+		//matrix = glm::rotate(matrix, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		//matrix = glm::scale(matrix, m_scale);
 
-glm::vec3 Transform::getForward()
-{
-	return glm::vec3();
-}
+		//m_localMatrix = matrix;
 
-glm::mat4 Transform::getMatrix()
-{
-	if (m_isMatrixDirty) {
-		glm::mat4 matrix = glm::mat4(1.0f);
-
-		matrix = glm::translate(matrix, m_position);
-		matrix = glm::rotate(matrix, m_rotation.y, glm::vec3(-1.0f, 0.0f, 0.0f));
-		matrix = glm::rotate(matrix, m_rotation.x, glm::vec3(0.0f, 1.0f, 0.0f));
-		matrix = glm::rotate(matrix, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		matrix = glm::scale(matrix, m_scale);
-
-		m_transformMatrix = matrix;
+		m_localMatrix = glm::translate(m_position) * glm::toMat4(m_rotation) * glm::scale(m_scale);
 	}
 
-	return m_transformMatrix;
+	return m_localMatrix;
+}
+
+glm::mat4 Transform::getGlobalMatrix()
+{
+	if (!m_parent) {
+		m_globalMatrix = getLocalMatrix();
+	}
+	else if (m_shouldUpdateGlobalMatrix) {
+		m_globalMatrix = m_parent->getGlobalMatrix() * getLocalMatrix();
+	}
+
+	return m_globalMatrix;
 }

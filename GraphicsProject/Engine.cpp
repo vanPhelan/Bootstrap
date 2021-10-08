@@ -131,7 +131,7 @@ int Engine::draw()
 		camera->getNearClip(),
 		camera->getFarClip()
 	);
-	glm::mat4 projectionViewModel = m_projectionMatrix * camera->getGlobalTransform();
+	glm::mat4 projectionViewModel = m_projectionMatrix * camera->getTransform()->getGlobalMatrix();
 	m_shader.bindUniform("projectionViewModel", projectionViewModel);
 
 	m_activeWorld->draw();
