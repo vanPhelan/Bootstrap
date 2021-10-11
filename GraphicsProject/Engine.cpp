@@ -34,12 +34,23 @@ int Engine::run()
 		return exitCode;
 	}
 
+	double deltaTime = 0.0f;
+	double timeOfPreviousUpdate = 0.0;
+
 	//Update and draw
 	while (!getGameOver()) {
-		exitCode = update(1.0f);
+		//Get the current time
+		double timeOfCurrentUpdate = glfwGetTime();
+		//Find the change in time
+		deltaTime = timeOfCurrentUpdate - timeOfPreviousUpdate;
+		//Store the current time for the next loop
+		timeOfPreviousUpdate = timeOfCurrentUpdate;
+
+		exitCode = update(deltaTime);
 		if (exitCode) {
 			return exitCode;
 		}
+
 		exitCode = draw();
 		if (exitCode) {
 			return exitCode;
@@ -87,11 +98,11 @@ int Engine::start()
 	//Initialize the shader
 	m_shader.loadShader(
 		aie::eShaderStage::VERTEX,
-		"simpleVert.shader"
+		"vertex.shader"
 	);
 	m_shader.loadShader(
 		aie::eShaderStage::FRAGMENT,
-		"simpleFrag.shader"
+		"fragment.shader"
 	);
 	if (!m_shader.link()) {
 		printf("Shader Error: %s\n", m_shader.getLastError());

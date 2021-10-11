@@ -45,6 +45,9 @@
     <ClCompile Include="TestWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -74,12 +77,15 @@
     <ClInclude Include="TestWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="simpleFrag.shader">
+    <None Include="fragment.shader">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="simpleVert.shader">
+    <None Include="vertex.shader">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

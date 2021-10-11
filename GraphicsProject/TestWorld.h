@@ -1,6 +1,6 @@
 #pragma once
 #include "World.h"
-#include "Camera.h"
+#include "PlayerCamera.h"
 #include "Quad.h"
 
 class TestWorld : public World
@@ -10,7 +10,7 @@ public:
 	void onEnd() override;
 
 private:
-	Camera* m_camera = nullptr;
+	PlayerCamera* m_camera = nullptr;
 	Quad* m_quad = nullptr;
 };
 

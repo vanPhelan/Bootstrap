@@ -153,6 +153,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="TestWorld.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="PlayerCamera.h" />
     <ClInclude Include="TestWorld.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Quad.h" />
@@ -173,8 +175,8 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="simpleFrag.shader" />
-    <None Include="simpleVert.shader" />
+    <None Include="fragment.shader" />
+    <None Include="vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
