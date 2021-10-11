@@ -31,7 +31,7 @@ private:
 
 	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);
 
-	aie::ShaderProgram m_shader;
+	aie::ShaderProgram* m_shader = nullptr;
 
 	World* m_activeWorld = nullptr;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.h"
+#include "Shader.h"
 #include "glm\mat4x4.hpp"
 
 class Entity

@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "gl_core_4_4.h"
 
 Mesh::Mesh()
 {
@@ -119,12 +120,11 @@ void Mesh::onDraw()
 		return;
 	}
 
-	// pull uniforms from the shader
+	//Bind the global transform matrix as uniform modelMatrix
 	int modelMatrix = glGetUniformLocation(program, "modelMatrix");
-
-	// set texture slots (these don't change per material)
 	if (modelMatrix >= 0)
-		glUniformMatrix4fv(modelMatrix, 1, false, getTransform()->getGlobalMatrix());
+		glUniformMatrix4fv(modelMatrix, 1, false, &(getTransform()->getGlobalMatrix())[0][0]);
+
 	glBindVertexArray(m_vertexArrayObject);
 	glDrawArrays(GL_TRIANGLES, 0, m_triCount * 3);
 }

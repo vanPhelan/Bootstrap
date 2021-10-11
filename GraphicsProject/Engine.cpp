@@ -13,6 +13,8 @@ Engine::Engine(int width, int height, const char* title)
 	m_width = width;
 	m_height = height;
 	m_title = title;
+
+	m_shader = new aie::ShaderProgram();
 }
 
 Engine::~Engine()
@@ -96,20 +98,18 @@ int Engine::start()
 	glEnable(GL_DEPTH_TEST);
 
 	//Initialize the shader
-	m_shader.loadShader(
+	m_shader->loadShader(
 		aie::eShaderStage::VERTEX,
 		"vertex.shader"
 	);
-	m_shader.loadShader(
+	m_shader->loadShader(
 		aie::eShaderStage::FRAGMENT,
 		"fragment.shader"
 	);
-	if (!m_shader.link()) {
-		printf("Shader Error: %s\n", m_shader.getLastError());
+	if (!m_shader->link()) {
+		printf("Shader Error: %s\n", m_shader->getLastError());
 		return -10;
 	}
-
-	m_activeWorld->start();
 
 	return 0;
 }
@@ -132,7 +132,7 @@ int Engine::draw()
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_shader.bind();
+	m_shader->bind();
 
 	Camera* camera = m_activeWorld->getCamera();
 
@@ -142,8 +142,9 @@ int Engine::draw()
 		camera->getNearClip(),
 		camera->getFarClip()
 	);
-	glm::mat4 projectionViewModel = m_projectionMatrix * camera->getTransform()->getGlobalMatrix();
-	m_shader.bindUniform("projectionViewModel", projectionViewModel);
+	glm::mat4 projectionViewMatrix = m_projectionMatrix * camera->getTransform()->getGlobalMatrix();
+	m_shader->bindUniform("cameraPosition", camera->getTransform()->getPosition());
+	m_shader->bindUniform("projectionViewMatrix", projectionViewMatrix);
 
 	m_activeWorld->draw();
 

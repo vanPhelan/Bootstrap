@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Camera.h"
+#include "Shader.h"
 #include <list>
 
 class World
@@ -33,5 +34,7 @@ private:
 	std::list<Entity*> addList;
 	std::list<Entity*> removeList;
 	std::list<Entity*> destroyList;
+
+	bool m_started = false;
 };
 

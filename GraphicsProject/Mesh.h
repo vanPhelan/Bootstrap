@@ -1,6 +1,5 @@
 #pragma once
 #include "Entity.h"
-#include "gl_core_4_4.h"
 #include "glm\vec4.hpp"
 #include "glm\mat4x4.hpp"
 

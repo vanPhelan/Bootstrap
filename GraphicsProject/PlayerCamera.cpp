@@ -12,21 +12,10 @@ void PlayerCamera::onUpdate(float deltaTime)
     int keyUp = GLFW_KEY_E;
     int keyDown = GLFW_KEY_Q;
 
+    //Get the direction vectors
     glm::vec3 right = getTransform()->getRight();
     glm::vec3 up = getTransform()->getUp();
     glm::vec3 forward = getTransform()->getForward();
-
-    ////Find the direction
-    //glm::vec3 direction(
-    //    glfwGetKey(window, keyRight) - glfwGetKey(window, keyLeft),
-    //    glfwGetKey(window, keyUp) - glfwGetKey(window, keyDown),
-    //    glfwGetKey(window, keyForward) - glfwGetKey(window, keyBack)
-    //);
-    //if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f)
-    //    direction = glm::normalize(direction);
-
-    ////Move
-    //getTransform()->translate(direction * m_moveSpeed * deltaTime);
 
     //Check input
     if (glfwGetKey(window, keyForward)) {

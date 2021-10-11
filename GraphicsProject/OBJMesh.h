@@ -1,20 +1,20 @@
 #pragma once
 
+#include "Mesh.h"
+#include "Texture.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <string>
 #include <vector>
-#include "Texture.h"
-#include "Entity.h"
 
 namespace aie {
 
 // a simple triangle mesh wrapper
-class OBJMesh : public Entity {
+class OBJMesh {
 public:
 
-	// a vertex structure for obj files
+	 //a vertex structure for obj file
 	struct Vertex {
 		glm::vec4 position; // added to attrib location 0
 		glm::vec4 normal;	// added to attrib location 1
@@ -54,6 +54,7 @@ public:
 	// will fail if a mesh has already been loaded in to this instance
 	bool load(const char* filename, bool loadTextures = true, bool flipTextureV = false);
 
+	//void onDraw() override;
 	// allow option to draw as patches for tessellation
 	void draw(bool usePatches = false);
 

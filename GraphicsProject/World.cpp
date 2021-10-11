@@ -3,10 +3,15 @@
 void World::start()
 {
 	onStart();
+	m_started = true;
 }
 
 void World::update(float deltaTime)
 {
+	if (!m_started) {
+		start();
+	}
+
 	onUpdate(deltaTime);
 
 	//Update the list of entities
