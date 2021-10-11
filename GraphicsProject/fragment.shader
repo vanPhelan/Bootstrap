@@ -1,9 +1,11 @@
-//A simple fragment shader
 #version 410
 
-in vec4 color;
-out vec4 FragColor;
+in vec4 fPosition;
+in vec4 fNormal;
+in vec4 fColor;
+
+out vec4 pColor;
 
 void main() {
-	FragColor = color;
+	pColor = fColor;
 }

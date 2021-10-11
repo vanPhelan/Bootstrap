@@ -11,11 +11,14 @@ void TestWorld::onStart()
 
 	add(m_camera);
 	add(m_quad = new Quad());
+	//add(m_obj = new aie::OBJMesh());
+	//m_obj->load("Lucy.obj");
 }
 
 void TestWorld::onEnd()
 {
 	destroy(m_camera);
+	//destroy(m_obj);
 	destroy(m_quad);
 }
 

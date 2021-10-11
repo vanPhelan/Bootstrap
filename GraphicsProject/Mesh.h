@@ -9,6 +9,9 @@ class Mesh : public Entity
 public:
 	struct Vertex {
 		glm::vec4 position = glm::vec4(0.0f);
+		glm::vec4 normal;
+		glm::vec2 texCoord;
+		glm::vec4 tangent;
 		glm::vec4 color = glm::vec4(1.0f);
 	};
 
