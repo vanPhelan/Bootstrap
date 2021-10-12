@@ -87,7 +87,7 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 		chunk.indexCount = (unsigned int)s.mesh.indices.size();
 
 		// create vertex data
-		std::vector<Vertex> vertices;
+		std::vector<Mesh::Vertex> vertices;
 		vertices.resize(s.mesh.positions.size() / 3);
 		size_t vertCount = vertices.size();
 
@@ -103,7 +103,7 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 
 			// flip the T / V (might not always be needed, depends on how mesh was made)
 			if (hasTexture)
-				vertices[i].texcoord = glm::vec2(s.mesh.texcoords[i * 2 + 0], flipTextureV ? 1.0f - s.mesh.texcoords[i * 2 + 1] : s.mesh.texcoords[i * 2 + 1]);
+				vertices[i].texCoord = glm::vec2(s.mesh.texcoords[i * 2 + 0], flipTextureV ? 1.0f - s.mesh.texcoords[i * 2 + 1] : s.mesh.texcoords[i * 2 + 1]);
 		}
 
 		// calculate for normal mapping
@@ -114,23 +114,23 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 		glBindBuffer(GL_ARRAY_BUFFER, chunk.vbo);
 
 		// fill vertex buffer
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Mesh::Vertex), vertices.data(), GL_STATIC_DRAW);
 
 		// enable first element as positions
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), 0);
 
 		// enable normals
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 1));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 1));
 
 		// enable texture coords
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 2));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 2));
 
 		// enable tangents
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 2 + sizeof(glm::vec2)));
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 2 + sizeof(glm::vec2)));
 
 		// bind 0 for safety
 		glBindVertexArray(0);
@@ -158,20 +158,20 @@ void OBJMesh::draw(bool usePatches /* = false */) {
 	}
 
 	// pull uniforms from the shader
-	int kaUniform = glGetUniformLocation(program, "Ka");
-	int kdUniform = glGetUniformLocation(program, "Kd");
-	int ksUniform = glGetUniformLocation(program, "Ks");
-	int keUniform = glGetUniformLocation(program, "Ke");
+	int kaUniform = glGetUniformLocation(program, "kAmbient");
+	int kdUniform = glGetUniformLocation(program, "kDiffuse");
+	int ksUniform = glGetUniformLocation(program, "kSpecular");
+	int keUniform = glGetUniformLocation(program, "kEmissive");
 	int opacityUniform = glGetUniformLocation(program, "opacity");
-	int specPowUniform = glGetUniformLocation(program, "specularPower");
+	int specPowUniform = glGetUniformLocation(program, "kSpecularPower");
 
-	int alphaTexUniform = glGetUniformLocation(program, "alphaTexture");
-	int ambientTexUniform = glGetUniformLocation(program, "ambientTexture");
-	int diffuseTexUniform = glGetUniformLocation(program, "diffuseTexture");
-	int specTexUniform = glGetUniformLocation(program, "specularTexture");
-	int specHighlightTexUniform = glGetUniformLocation(program, "specularHighlightTexture");
-	int normalTexUniform = glGetUniformLocation(program, "normalTexture");
-	int dispTexUniform = glGetUniformLocation(program, "displacementTexture");
+	int alphaTexUniform = glGetUniformLocation(program, "tAlpha");
+	int ambientTexUniform = glGetUniformLocation(program, "tAmbient");
+	int diffuseTexUniform = glGetUniformLocation(program, "tDiffuse");
+	int specTexUniform = glGetUniformLocation(program, "tSpecular");
+	int specHighlightTexUniform = glGetUniformLocation(program, "tSpecularHighlight");
+	int normalTexUniform = glGetUniformLocation(program, "tNormal");
+	int dispTexUniform = glGetUniformLocation(program, "tDisplacement");
 
 	// set texture slots (these don't change per material)
 	if (diffuseTexUniform >= 0)
@@ -262,7 +262,7 @@ void OBJMesh::draw(bool usePatches /* = false */) {
 	}
 }
 
-void OBJMesh::calculateTangents(std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
+void OBJMesh::calculateTangents(std::vector<Mesh::Vertex>& vertices, const std::vector<unsigned int>& indices) {
 	unsigned int vertexCount = (unsigned int)vertices.size();
 	glm::vec4* tan1 = new glm::vec4[vertexCount * 2];
 	glm::vec4* tan2 = tan1 + vertexCount;
@@ -278,9 +278,9 @@ void OBJMesh::calculateTangents(std::vector<Vertex>& vertices, const std::vector
 		const glm::vec4& v2 = vertices[i2].position;
 		const glm::vec4& v3 = vertices[i3].position;
 
-		const glm::vec2& w1 = vertices[i1].texcoord;
-		const glm::vec2& w2 = vertices[i2].texcoord;
-		const glm::vec2& w3 = vertices[i3].texcoord;
+		const glm::vec2& w1 = vertices[i1].texCoord;
+		const glm::vec2& w2 = vertices[i2].texCoord;
+		const glm::vec2& w3 = vertices[i3].texCoord;
 
 		float x1 = v2.x - v1.x;
 		float x2 = v3.x - v1.x;

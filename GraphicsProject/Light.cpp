@@ -23,7 +23,6 @@ void Light::onDraw()
 	int lightAmbient = glGetUniformLocation(program, "lightAmbient");
 	int lightDiffuse = glGetUniformLocation(program, "lightDiffuse");
 	int lightSpecular = glGetUniformLocation(program, "lightSpecular");
-	int lightSpecularPower = glGetUniformLocation(program, "lightSpecularPower");
 
 	if (lightDirection >= 0) {
 		glm::vec3 direction = getDirection();
@@ -37,9 +36,6 @@ void Light::onDraw()
 	}
 	if (lightSpecular >= 0) {
 		glUniform3f(lightSpecular, m_specular.x, m_specular.y, m_specular.z);
-	}
-	if (lightSpecularPower >= 0) {
-		glUniform1f(lightSpecularPower, m_specularPower);
 	}
 
 	//Bind the global transform matrix as uniform modelMatrix

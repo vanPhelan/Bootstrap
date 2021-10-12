@@ -54,6 +54,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -95,6 +98,9 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.shader">
@@ -117,17 +123,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="Dragon.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-    <Object Include="Lucy.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-    <Object Include="Buddha.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-    <Object Include="Bunny.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
+    <CopyFileToFolders Include="Buddha.obj" />
+    <CopyFileToFolders Include="Bunny.obj" />
+    <CopyFileToFolders Include="Dragon.obj" />
+    <CopyFileToFolders Include="Lucy.obj" />
   </ItemGroup>
 </Project>

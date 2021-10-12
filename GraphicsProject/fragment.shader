@@ -13,7 +13,6 @@ uniform vec3 iDirection;
 uniform vec3 iAmbient;
 uniform vec3 iDiffuse;
 uniform vec3 iSpecular;
-uniform float iSpecularPower;
 
 uniform vec3 cameraPosition;
 

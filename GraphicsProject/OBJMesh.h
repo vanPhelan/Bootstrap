@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Mesh.h"
-#include "Texture.h"
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
+#include "Material.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 #include <string>
 #include <vector>
 
@@ -14,39 +14,39 @@ namespace aie {
 class OBJMesh {
 public:
 
-	 //a vertex structure for obj file
-	struct Vertex {
-		glm::vec4 position; // added to attrib location 0
-		glm::vec4 normal;	// added to attrib location 1
-		glm::vec2 texcoord;	// added to attrib location 2
+	// //a vertex structure for obj file
+	//struct Vertex {
+	//	glm::vec4 position; // added to attrib location 0
+	//	glm::vec4 normal;	// added to attrib location 1
+	//	glm::vec2 texcoord;	// added to attrib location 2
 
-							// normal-mapping data
-		glm::vec4 tangent;	// added to attrib location 3
-	};
+	//						// normal-mapping data
+	//	glm::vec4 tangent;	// added to attrib location 3
+	//};
 
 	// a basic material
-	class Material {
-	public:
+	//class Material {
+	//public:
 
-		Material() : ambient(1), diffuse(1), specular(0), emissive(0), specularPower(1), opacity(1) {}
-		~Material() {}
+	//	Material() : ambient(1), diffuse(1), specular(0), emissive(0), specularPower(1), opacity(1) {}
+	//	~Material() {}
 
-		glm::vec3 ambient;
-		glm::vec3 diffuse;
-		glm::vec3 specular;
-		glm::vec3 emissive;
+	//	glm::vec3 ambient;
+	//	glm::vec3 diffuse;
+	//	glm::vec3 specular;
+	//	glm::vec3 emissive;
 
-		float specularPower;
-		float opacity;
+	//	float specularPower;
+	//	float opacity;
 
-		Texture diffuseTexture;				// bound slot 0
-		Texture alphaTexture;				// bound slot 1
-		Texture ambientTexture;				// bound slot 2
-		Texture specularTexture;			// bound slot 3
-		Texture specularHighlightTexture;	// bound slot 4
-		Texture normalTexture;				// bound slot 5
-		Texture displacementTexture;		// bound slot 6
-	};
+	//	Texture diffuseTexture;				// bound slot 0
+	//	Texture alphaTexture;				// bound slot 1
+	//	Texture ambientTexture;				// bound slot 2
+	//	Texture specularTexture;			// bound slot 3
+	//	Texture specularHighlightTexture;	// bound slot 4
+	//	Texture normalTexture;				// bound slot 5
+	//	Texture displacementTexture;		// bound slot 6
+	//};
 
 	OBJMesh() {}
 	~OBJMesh();
@@ -67,7 +67,7 @@ public:
 
 private:
 
-	void calculateTangents(std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
+	void calculateTangents(std::vector<Mesh::Vertex>& vertices, const std::vector<unsigned int>& indices);
 
 	struct MeshChunk {
 		unsigned int	vao, vbo, ibo;

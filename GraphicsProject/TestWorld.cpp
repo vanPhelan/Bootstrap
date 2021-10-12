@@ -9,7 +9,6 @@ void TestWorld::onStart()
 	m_light->setAmbient(glm::vec4(0.6f, 0.6f, 0.0f, 1.0f));
 	m_light->setDiffuse(glm::vec4(0.6f, 0.6f, 1.0f, 1.0f));
 	m_light->setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_light->setSpecularPower(2.0f);
 	add(m_light);
 
 	//Camera
@@ -19,7 +18,7 @@ void TestWorld::onStart()
 	setCamera(m_camera);
 	add(m_camera);
 
-	//Action!
+	//Quad
 	m_quad = new Quad();
 	m_quad->setColor(glm::vec4(8.0f, 4.0f, 2.0f, 1.0f));
 	add(m_quad);

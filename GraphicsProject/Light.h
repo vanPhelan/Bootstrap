@@ -24,14 +24,10 @@ public:
 	//Specular Color
 	glm::vec4 getSpecular() { return m_specular; }
 	void setSpecular(glm::vec4 specular) { m_specular = specular; }
-	//Specular Power
-	float getSpecularPower() { return m_specularPower; }
-	void setSpecularPower(float specularPower) { m_specularPower = specularPower; }
 
 private:
 	glm::vec4 m_ambient = glm::vec4(0.0f);
 	glm::vec4 m_diffuse = glm::vec4(0.0f);
 	glm::vec4 m_specular = glm::vec4(0.0f);
-	float m_specularPower = 1.0f;
 };
 
