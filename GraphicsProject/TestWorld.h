@@ -9,13 +9,12 @@ class TestWorld : public World
 {
 public:
 	void onStart() override;
-	void onDraw() override;
 	void onEnd() override;
 
 private:
 	PlayerCamera* m_camera = nullptr;
 	Quad* m_quad = nullptr;
-	aie::OBJMesh* m_obj = nullptr;
+	OBJMesh* m_obj = nullptr;
 	Light* m_light = nullptr;
 };
 

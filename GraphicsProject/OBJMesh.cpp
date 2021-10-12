@@ -1,11 +1,9 @@
 #include "OBJMesh.h"
 #include "gl_core_4_4.h"
-#include <glm/geometric.hpp>
+#include "glm/geometric.hpp"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
-
-namespace aie {
 
 OBJMesh::~OBJMesh() {
 	for (auto& c : m_meshChunks) {
@@ -87,7 +85,7 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 		chunk.indexCount = (unsigned int)s.mesh.indices.size();
 
 		// create vertex data
-		std::vector<Mesh::Vertex> vertices;
+		std::vector<Vertex> vertices;
 		vertices.resize(s.mesh.positions.size() / 3);
 		size_t vertCount = vertices.size();
 
@@ -114,23 +112,23 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 		glBindBuffer(GL_ARRAY_BUFFER, chunk.vbo);
 
 		// fill vertex buffer
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Mesh::Vertex), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
 		// enable first element as positions
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), 0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 
 		// enable normals
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 1));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 1));
 
 		// enable texture coords
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 2));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 2));
 
 		// enable tangents
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Mesh::Vertex), (void*)(sizeof(glm::vec4) * 2 + sizeof(glm::vec2)));
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4) * 2 + sizeof(glm::vec2)));
 
 		// bind 0 for safety
 		glBindVertexArray(0);
@@ -147,6 +145,11 @@ bool OBJMesh::load(const char* filename, bool loadTextures /* = true */, bool fl
 	return true;
 }
 
+void OBJMesh::onDraw()
+{
+	draw();
+}
+
 void OBJMesh::draw(bool usePatches /* = false */) {
 
 	int program = -1;
@@ -158,11 +161,13 @@ void OBJMesh::draw(bool usePatches /* = false */) {
 	}
 
 	// pull uniforms from the shader
+	int modelMatrix = glGetUniformLocation(program, "modelMatrix");
+
 	int kaUniform = glGetUniformLocation(program, "kAmbient");
 	int kdUniform = glGetUniformLocation(program, "kDiffuse");
 	int ksUniform = glGetUniformLocation(program, "kSpecular");
 	int keUniform = glGetUniformLocation(program, "kEmissive");
-	int opacityUniform = glGetUniformLocation(program, "opacity");
+	int opacityUniform = glGetUniformLocation(program, "kOpacity");
 	int specPowUniform = glGetUniformLocation(program, "kSpecularPower");
 
 	int alphaTexUniform = glGetUniformLocation(program, "tAlpha");
@@ -172,6 +177,9 @@ void OBJMesh::draw(bool usePatches /* = false */) {
 	int specHighlightTexUniform = glGetUniformLocation(program, "tSpecularHighlight");
 	int normalTexUniform = glGetUniformLocation(program, "tNormal");
 	int dispTexUniform = glGetUniformLocation(program, "tDisplacement");
+
+	if (modelMatrix >= 0)
+		glUniformMatrix4fv(modelMatrix, 1, false, &(getTransform()->getGlobalMatrix())[0][0]);
 
 	// set texture slots (these don't change per material)
 	if (diffuseTexUniform >= 0)
@@ -262,7 +270,7 @@ void OBJMesh::draw(bool usePatches /* = false */) {
 	}
 }
 
-void OBJMesh::calculateTangents(std::vector<Mesh::Vertex>& vertices, const std::vector<unsigned int>& indices) {
+void OBJMesh::calculateTangents(std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
 	unsigned int vertexCount = (unsigned int)vertices.size();
 	glm::vec4* tan1 = new glm::vec4[vertexCount * 2];
 	glm::vec4* tan2 = tan1 + vertexCount;
@@ -325,5 +333,4 @@ void OBJMesh::calculateTangents(std::vector<Mesh::Vertex>& vertices, const std::
 	}
 
 	delete[] tan1;
-}
 }

@@ -143,8 +143,8 @@ int Engine::draw()
 		camera->getFarClip()
 	);
 	glm::mat4 projectionViewMatrix = m_projectionMatrix * camera->getTransform()->getGlobalMatrix();
-	m_shader->bindUniform("cameraPosition", camera->getTransform()->getPosition());
 	m_shader->bindUniform("projectionViewMatrix", projectionViewMatrix);
+	m_shader->bindUniform("cameraPosition", camera->getTransform()->getPosition());
 
 	m_activeWorld->draw();
 

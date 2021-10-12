@@ -19,10 +19,10 @@ void Light::onDraw()
 		return;
 	}
 
-	int lightDirection = glGetUniformLocation(program, "lightDirection");
-	int lightAmbient = glGetUniformLocation(program, "lightAmbient");
-	int lightDiffuse = glGetUniformLocation(program, "lightDiffuse");
-	int lightSpecular = glGetUniformLocation(program, "lightSpecular");
+	int lightDirection = glGetUniformLocation(program, "iDirection");
+	int lightAmbient = glGetUniformLocation(program, "iAmbient");
+	int lightDiffuse = glGetUniformLocation(program, "iDiffuse");
+	int lightSpecular = glGetUniformLocation(program, "iSpecular");
 
 	if (lightDirection >= 0) {
 		glm::vec3 direction = getDirection();
@@ -37,11 +37,6 @@ void Light::onDraw()
 	if (lightSpecular >= 0) {
 		glUniform3f(lightSpecular, m_specular.x, m_specular.y, m_specular.z);
 	}
-
-	//Bind the global transform matrix as uniform modelMatrix
-	int modelMatrix = glGetUniformLocation(program, "modelMatrix");
-	if (modelMatrix >= 0)
-		glUniformMatrix4fv(modelMatrix, 1, false, &(getTransform()->getGlobalMatrix())[0][0]);
 }
 
 glm::vec3 Light::getDirection()
